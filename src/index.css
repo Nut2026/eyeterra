@@ -1,0 +1,261 @@
+/* stylelint-disable */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Eyeterra Design System — Warm cream + sage + terracotta + dusty blue */
+
+/* OpenDyslexic font for accessibility toggle — bundled OTF files */
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./assets/fonts/OpenDyslexic-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./assets/fonts/OpenDyslexic-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./assets/fonts/OpenDyslexic-Italic.otf') format('opentype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'OpenDyslexic';
+  src: url('./assets/fonts/OpenDyslexic-BoldItalic.otf') format('opentype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.25rem;
+
+    /* Eyeterra warm palette */
+    --background: 40 67% 97%;
+    --foreground: 20 6% 17%;
+    --card: 85 20% 84%;
+    --card-foreground: 20 6% 17%;
+    --popover: 40 67% 97%;
+    --popover-foreground: 20 6% 17%;
+    --primary: 16 61% 60%;
+    --primary-foreground: 40 67% 97%;
+    --secondary: 210 25% 63%;
+    --secondary-foreground: 40 67% 97%;
+    --muted: 85 15% 90%;
+    --muted-foreground: 20 6% 42%;
+    --accent: 85 20% 84%;
+    --accent-foreground: 20 6% 17%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 20 15% 78%;
+    --input: 40 30% 90%;
+    --ring: 16 61% 60%;
+
+    --chart-1: 16 61% 60%;
+    --chart-2: 210 25% 63%;
+    --chart-3: 85 20% 60%;
+    --chart-4: 40 80% 55%;
+    --chart-5: 0 60% 55%;
+
+    --success: 142 60% 40%;
+    --warning: 38 90% 50%;
+    --info: 210 70% 50%;
+
+    --sidebar-background: 85 20% 88%;
+    --sidebar-foreground: 20 6% 17%;
+    --sidebar-primary: 16 61% 60%;
+    --sidebar-primary-foreground: 40 67% 97%;
+    --sidebar-accent: 85 20% 80%;
+    --sidebar-accent-foreground: 20 6% 17%;
+    --sidebar-border: 85 15% 75%;
+    --sidebar-ring: 16 61% 60%;
+  }
+
+  .dark {
+    --background: 20 10% 10%;
+    --foreground: 40 30% 92%;
+    --card: 20 8% 14%;
+    --card-foreground: 40 30% 92%;
+    --popover: 20 10% 10%;
+    --popover-foreground: 40 30% 92%;
+    --primary: 16 55% 55%;
+    --primary-foreground: 40 30% 92%;
+    --secondary: 210 20% 45%;
+    --secondary-foreground: 40 30% 92%;
+    --muted: 20 8% 18%;
+    --muted-foreground: 40 15% 62%;
+    --accent: 85 12% 22%;
+    --accent-foreground: 40 30% 92%;
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 40 30% 92%;
+    --border: 20 8% 22%;
+    --input: 20 8% 20%;
+    --ring: 16 55% 55%;
+
+    --chart-1: 16 55% 55%;
+    --chart-2: 210 20% 55%;
+    --chart-3: 85 15% 45%;
+    --chart-4: 40 70% 50%;
+    --chart-5: 0 55% 50%;
+
+    --success: 142 50% 35%;
+    --warning: 38 80% 45%;
+    --info: 210 60% 45%;
+
+    --sidebar-background: 20 8% 12%;
+    --sidebar-foreground: 40 30% 92%;
+    --sidebar-primary: 16 55% 55%;
+    --sidebar-primary-foreground: 40 30% 92%;
+    --sidebar-accent: 20 8% 18%;
+    --sidebar-accent-foreground: 40 30% 92%;
+    --sidebar-border: 20 8% 20%;
+    --sidebar-ring: 16 55% 55%;
+  }
+
+  /* Dyslexia-friendly override */
+  .dyslexia-font,
+  .dyslexia-font * {
+    font-family: 'OpenDyslexic', sans-serif !important;
+  }
+
+  /* ── High Contrast — Light mode ───────────────────────────────────────── */
+  .high-contrast:not(.dark) {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 95%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 220 100% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 80% 30%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 20%;
+    --accent: 0 0% 88%;
+    --accent-foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+    --input: 0 0% 93%;
+    --ring: 220 100% 40%;
+    filter: contrast(1.15);
+  }
+
+  /* ── High Contrast — Dark mode ────────────────────────────────────────── */
+  .dark.high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 210 100% 60%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 210 80% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 85%;
+    --accent: 0 0% 12%;
+    --accent-foreground: 0 0% 100%;
+    --border: 0 0% 55%;
+    --input: 0 0% 8%;
+    --ring: 210 100% 60%;
+    filter: contrast(1.15);
+  }
+
+  /* Exclude images, icons, simulator from any HC filter */
+  .high-contrast .no-hc-invert,
+  .high-contrast img,
+  .high-contrast svg image {
+    filter: none !important;
+  }
+
+  /* Dark HC: untoggled switches get a blue outline so they're visible */
+  .dark.high-contrast [role="switch"]:not([data-state="checked"]) {
+    outline: 2px solid hsl(210 100% 60%);
+    outline-offset: 1px;
+  }
+
+  /* Light HC: untoggled switches get a black outline so they're visible */
+  .high-contrast:not(.dark) [role="switch"]:not([data-state="checked"]) {
+    outline: 2px solid hsl(0 0% 0%);
+    outline-offset: 1px;
+  }
+
+  /* Dark HC: dropdown separator must be visible */
+  .dark.high-contrast [data-radix-dropdown-menu-separator],
+  .dark.high-contrast .hc-separator {
+    background-color: hsl(0 0% 55%) !important;
+  }
+
+  /* Footer "Made with 🧡 by Nuz" — exempt from HC colour shift */
+  .high-contrast .hc-footer-exempt {
+    filter: none !important;
+    color: inherit !important;
+  }
+
+  * {
+    @apply border-border;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 6px;
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 3px;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}
+
+/* ── Print styles for Vision Tour Final Report ────────────────────────────── */
+@media print {
+  /* Hide all chrome: header, footer, sidebar, nav, action buttons */
+  header, footer, nav, aside,
+  [data-sidebar], [role="navigation"],
+  .print\:hidden { display: none !important; }
+
+  /* Reset page background so ink doesn't waste toner */
+  body, html { background: white !important; color: black !important; }
+
+  /* Eyeterra logo / branding: pin to top, never centered */
+  .print-logo {
+    display: block !important;
+    position: static !important;
+    text-align: left !important;
+    margin: 0 0 16px 0 !important;
+    padding: 0 !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+  }
+
+  /* Make report content full-width */
+  main, [role="main"], .max-w-4xl, .max-w-7xl {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Avoid page breaks inside key sections */
+  table, .border-2, .space-y-6 > * { page-break-inside: avoid; }
+
+  /* Ensure table borders print */
+  table, th, td { border-color: #999 !important; }
+}
