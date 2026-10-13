@@ -34,20 +34,20 @@ All in all, I appreciate that Eyeterra's design achieved a degree of warmth inst
 Upcoming features in the list:
 
 [] Enhanced accessibility features (font size, seizure safety, colour blind filters)
+
 [] Screen readers and voice navigation
+
 [] Improved localStorage tracking (such as a 7-day Eye Integrity graph)
+
 [] Add an "in-depth" mode to Vision Tour that tests implicit symptoms
+
 [] Integrate Gemini analysis for a specialised report card in Vision Tour
 
 And many more that will come through experiments, exposure, feedback, and tiny "aha!" moments
 
 ## Deployment
 
-Eyeterra deploys to **GitHub Pages** via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). Push to `main` and the site builds and publishes automatically to `https://<username>.github.io/<repo-name>/`.
-
-One-time setup after the first push (or if the first run fails): **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-
-Optional: add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` under **Settings → Secrets and variables → Actions** to enable the anonymous Click Neonmap easter egg in production. Without them the site works the same — only the heatmap stays disabled. 
+Eyeterra deploys to **GitHub Pages** via [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml). 
 
 ## Contributing
 Eyeterra is open-source on GitHub as a non-profit and FOSS website to encourage community interaction. It's also to ensure that it remains helpful and relevant to all users. Needless to say, I'm actively hearing out opinions from various users, so protecting our eyes will no longer be that tough. 
