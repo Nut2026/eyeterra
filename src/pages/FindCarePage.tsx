@@ -3,7 +3,10 @@ import MainLayout from '@/components/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const MAPS_API_KEY = 'AIzaSyB_LJOYJL-84SMuxNB7LtRGhxEQLjswvy0';
+const MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+if (!MAPS_API_KEY) {
+  throw new Error('Missing VITE_GOOGLE_MAPS_API_KEY env var — needed for the Find Care map.');
+}
 
 const FindCarePage: React.FC = () => {
   const [location, setLocation] = useState('');
