@@ -28,6 +28,8 @@ const FindCarePage: React.FC = () => {
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const mapsAvailable = isMapsAvailable();
+
   const handleSearch = useCallback(() => {
     const q = location.trim();
     if (!q) return;
@@ -59,13 +61,18 @@ const FindCarePage: React.FC = () => {
             value={location}
             onChange={e => setLocation(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            placeholder="Enter city, suburb, or postcode…"
+            placeholder={
+              mapsAvailable
+                ? 'Enter city, suburb, or postcode…'
+                : "Google Maps is not available for this demo. But don't let that stop you, watch a full-time demo instead!"
+            }
             className="border-2 border-border text-base"
             aria-label="Location search"
+            disabled={!mapsAvailable}
           />
           <Button
             onClick={handleSearch}
-            disabled={loading || !location.trim()}
+            disabled={loading || !location.trim() || !mapsAvailable}
             className="border-2 border-primary shrink-0"
           >
             {loading ? 'Searching…' : 'Search'}
@@ -85,7 +92,7 @@ const FindCarePage: React.FC = () => {
               allowFullScreen
               title="Eye care clinics map"
             />
-          ) : isMapsAvailable() ? (
+          ) : mapsAvailable ? (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center p-8">
                 <div className="text-5xl mb-3" aria-hidden="true">🗺</div>
@@ -93,21 +100,13 @@ const FindCarePage: React.FC = () => {
               </div>
             </div>
           ) : (
-            <div className="relative w-full h-full flex items-center justify-center">
-              <div className="absolute inset-0">
-                <iframe
-                  src={FIND_CARE_YT_URL}
-                  title="Eye care demo"
-                  className="w-full h-full"
-                  allow="autoplay; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <p className="relative z-10 text-center text-foreground font-bold text-lg"
-                 style={{ backgroundColor: 'transparent' }}>
-                Google Maps is not available for this demo. But don't let that stop you, watch a full-time demo instead!
-              </p>
-            </div>
+            <iframe
+              src={FIND_CARE_YT_URL}
+              title="Eye care demo"
+              className="w-full h-full"
+              allow="autoplay; picture-in-picture"
+              allowFullScreen
+            />
           )}
         </div>
 
