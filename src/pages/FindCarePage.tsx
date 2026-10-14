@@ -3,9 +3,23 @@ import MainLayout from '@/components/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-if (!MAPS_API_KEY) {
-  throw new Error('Missing VITE_GOOGLE_MAPS_API_KEY env var — needed for the Find Care map.');
+const FIND_CARE_YT_URL = 'https://youtu.be/B6IOmb6mBMA';
+
+function getMapsAvailability() {
+  if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
+    return false;
+  }
+  try {
+    new Function('return true');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function isMapsAvailable(): boolean {
+  if (typeof window === 'undefined') return false;
+  return getMapsAvailability();
 }
 
 const FindCarePage: React.FC = () => {
@@ -67,15 +81,48 @@ const FindCarePage: React.FC = () => {
               frameBorder="0"
               style={{ border: 0 }}
               referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/search?key=${MAPS_API_KEY}&q=${encodeURIComponent(mapQuery)}&language=en`}
+              src={`https://www.google.com/maps/embed/v1/search?key=${encodeURIComponent(import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '')}&q=${encodeURIComponent(mapQuery)}&language=en`}
               allowFullScreen
               title="Eye care clinics map"
             />
-          ) : (
+          ) : isMapsAvailable() ? (
             <div className="w-full h-full flex items-center justify-center">
               <div className="text-center p-8">
                 <div className="text-5xl mb-3" aria-hidden="true">🗺</div>
                 <p className="text-muted-foreground text-sm">Enter a location above to see clinics on the map</p>
+              </div>
+            </div>
+          ) : (
+            <div className="relative w-full h-full flex items-center justify-center">
+              <div className="absolute inset-0">
+                <iframe
+                  src={FIND_CARE_YT_URL}
+                  title="Eye care video - click to open YouTube"
+                  className="w-full h-full"
+                  allow="autoplay; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+              <div className="relative z-10 text-center p-8"
+                   style={{ backgroundColor: 'transparent' }}>
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl border-4 border-border bg-card shadow-2xl mb-4"
+                     style={{ borderColor: 'var(--border)', backgroundColor: 'var(--card)' }}>
+                  <div className="text-3xl" aria-hidden="true">▶</div>
+                </div>
+                <p className="text-foreground font-bold text-lg mb-1">Google Maps is not available for this demo</p>
+                <p className="text-muted-foreground text-sm mb-4">Watch a short video about eye care instead</p>
+                <a
+                  href={FIND_CARE_YT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border-2 border-primary px-5 py-2.5 rounded-xl text-primary font-semibold hover:bg-primary hover:text-primary-foreground transition"
+                >
+                  Watch the video
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M7 10v4h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M3 16c0-3.3 2.7-6 6-6h6c3.3 0 6 2.7 6 6v.75a6.75 6.75 0 0 1-3.75 6.75h-1.5a3.75 3.75 0 0 0-3.75 3.75v.75H12v-2.25H8.25a3.75 3.75 0 0 1-3.75-3.75v-.75H3.75a3.75 3.75 0 0 1-3.75-3.75v-.75H0A3.75 3.75 0 0 1 0 7.5h3.75V7.5H3.75A3.75 3.75 0 0 1 0 3.75z" />
+                  </svg>
+                </a>
               </div>
             </div>
           )}

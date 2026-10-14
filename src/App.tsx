@@ -36,7 +36,7 @@ const App: React.FC = () => {
                 <Route path="/vision-fair/report" element={<Navigate to="/vision-tour" replace />} />
                 <Route path="/vision-tour/stop-:stopId" element={<Navigate to="/vision-tour" replace />} />
                 <Route path="/vision-tour/report" element={<Navigate to="/vision-tour" replace />} />
-                <Route path="/find-care" element={<ErrorBoundary><FindCarePage /></ErrorBoundary>} />
+                <Route path="/find-eye-care" element={<ErrorBoundary><FindCarePage /></ErrorBoundary>} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </Suspense>
