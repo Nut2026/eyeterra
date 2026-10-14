@@ -97,33 +97,16 @@ const FindCarePage: React.FC = () => {
               <div className="absolute inset-0">
                 <iframe
                   src={FIND_CARE_YT_URL}
-                  title="Eye care video - click to open YouTube"
+                  title="Eye care demo"
                   className="w-full h-full"
                   allow="autoplay; picture-in-picture"
                   allowFullScreen
                 />
               </div>
-              <div className="relative z-10 text-center p-8"
-                   style={{ backgroundColor: 'transparent' }}>
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl border-4 border-border bg-card shadow-2xl mb-4"
-                     style={{ borderColor: 'var(--border)', backgroundColor: 'var(--card)' }}>
-                  <div className="text-3xl" aria-hidden="true">▶</div>
-                </div>
-                <p className="text-foreground font-bold text-lg mb-1">Google Maps is not available for this demo</p>
-                <p className="text-muted-foreground text-sm mb-4">Watch a short video about eye care instead</p>
-                <a
-                  href={FIND_CARE_YT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border-2 border-primary px-5 py-2.5 rounded-xl text-primary font-semibold hover:bg-primary hover:text-primary-foreground transition"
-                >
-                  Watch the video
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M7 10v4h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M3 16c0-3.3 2.7-6 6-6h6c3.3 0 6 2.7 6 6v.75a6.75 6.75 0 0 1-3.75 6.75h-1.5a3.75 3.75 0 0 0-3.75 3.75v.75H12v-2.25H8.25a3.75 3.75 0 0 1-3.75-3.75v-.75H3.75a3.75 3.75 0 0 1-3.75-3.75v-.75H0A3.75 3.75 0 0 1 0 7.5h3.75V7.5H3.75A3.75 3.75 0 0 1 0 3.75z" />
-                  </svg>
-                </a>
-              </div>
+              <p className="relative z-10 text-center text-foreground font-bold text-lg"
+                 style={{ backgroundColor: 'transparent' }}>
+                Google Maps is not available for this demo. But don't let that stop you, watch a full-time demo instead!
+              </p>
             </div>
           )}
         </div>
