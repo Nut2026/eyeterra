@@ -11,7 +11,7 @@ const navLinks = [
   { name: 'Daily Habits', path: '/daily-habits' },
   { name: 'Awareness Hub', path: '/awareness' },
   { name: 'Vision Tour', path: '/vision-tour' },
-  { name: 'Find Eye Care', path: '/find-care' },
+  { name: 'Find Eye Care', path: '/find-eye-care' },
 ];
 
 const EyeterraIcon = () => (

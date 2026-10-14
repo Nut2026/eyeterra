@@ -58,7 +58,7 @@ const features: { Icon: React.FC; title: string; desc: string; path: string; cta
     Icon: ChartIcon,
     title: 'Find Eye Care',
     desc: 'Locate optometrists and ophthalmologists near you with live Google reviews.',
-    path: '/find-care',
+    path: '/find-eye-care',
     cta: 'Find a Clinic',
   },
 ];
