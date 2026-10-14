@@ -13,7 +13,6 @@ const AmslerStop: React.FC<AmslerProps> = ({ onResult, initialValue }) => {
   const [drawing, setDrawing] = useState(false);
   const [paths, setPaths] = useState<{ x: number; y: number }[][]>([]);
   const [currentPath, setCurrentPath] = useState<{ x: number; y: number }[]>([]);
-  // initialValue: 'true' | 'false' | undefined
   const [hasDistortions, setHasDistortions] = useState<boolean | null>(
     initialValue === 'true' ? true : initialValue === 'false' ? false : null
   );
@@ -45,7 +44,6 @@ const AmslerStop: React.FC<AmslerProps> = ({ onResult, initialValue }) => {
     pts.length < 2 ? '' : `M ${pts[0].x} ${pts[0].y} ` + pts.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ');
 
   const handleSubmit = () => {
-    // Ink overrides MCQ: if user drew on the grid, flag distortions regardless of button selection
     const inkPresent = paths.length > 0;
     const hasDist = inkPresent ? true : (hasDistortions ?? false);
     onResult('Amsler Grid', hasDist ? 'Distortions/wavy lines noted' : 'Grid appeared straight', hasDist, String(hasDist));

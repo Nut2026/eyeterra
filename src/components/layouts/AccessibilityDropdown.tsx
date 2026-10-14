@@ -70,7 +70,6 @@ const AccessibilityDropdown: React.FC = () => {
 
         <DropdownMenuSeparator className="my-2 hc-separator" />
 
-        {/* Easter egg: Click Neonmap — toggles globally, auto-updates per page */}
         <div className="px-1">
           <div className="flex items-center justify-between py-1.5 gap-4">
             <Label htmlFor="a11y-neonmap" className="text-sm cursor-pointer font-medium">Click Neonmap</Label>

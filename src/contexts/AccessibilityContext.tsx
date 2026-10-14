@@ -49,25 +49,21 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     localStorage.setItem('eyeterra-a11y', JSON.stringify(state));
     const root = document.documentElement;
-    // Dark mode
     if (state.darkMode) {
       root.classList.add('dark');
     } else {
       root.classList.remove('dark');
     }
-    // High contrast
     if (state.highContrast) {
       root.classList.add('high-contrast');
     } else {
       root.classList.remove('high-contrast');
     }
-    // Dyslexia font
     if (state.dyslexiaFont) {
       root.classList.add('dyslexia-font');
     } else {
       root.classList.remove('dyslexia-font');
     }
-    // Colorblind
     root.classList.remove('colorblind-deuteranopia', 'colorblind-protanopia', 'colorblind-tritanopia');
     if (state.colorblindFilter !== 'none') {
       root.classList.add(`colorblind-${state.colorblindFilter}`);
@@ -92,7 +88,6 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AccessibilityContext.Provider value={{ ...state, toggle, setColorblindFilter, mouseY }}>
-      {/* SVG Colorblind filters */}
       <svg className="absolute w-0 h-0 overflow-hidden" aria-hidden="true">
         <defs>
           <filter id="deuteranopia-filter">
@@ -107,7 +102,6 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
         </defs>
       </svg>
       {children}
-      {/* Reading guide — thin blue horizontal bar following mouse tip */}
       {state.readingGuide && (
         <div
           className="pointer-events-none fixed left-0 right-0 z-50 transition-transform duration-75"
@@ -120,7 +114,6 @@ export const AccessibilityProvider: React.FC<{ children: React.ReactNode }> = ({
           aria-hidden="true"
         />
       )}
-      {/* Reading mask — opaque overlay with a clear transparent cutout window */}
       {state.readingMask && (
         <div
           className="pointer-events-none fixed inset-0 z-40"

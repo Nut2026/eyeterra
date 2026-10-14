@@ -1,4 +1,3 @@
-// Vision Fair shared types
 export interface VFStop {
   id: number;
   name: string;

@@ -1,4 +1,3 @@
-// localStorage helpers with midnight reset support
 export function getTodayKey(base: string): string {
   const d = new Date();
   return `${base}-${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;

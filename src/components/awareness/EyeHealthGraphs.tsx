@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-// ─── Scroll-trigger hook ───────────────────────────────────────────────────
-
 function useInView(threshold = 0.25): [React.RefObject<HTMLDivElement | null>, boolean] {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -19,8 +17,6 @@ function useInView(threshold = 0.25): [React.RefObject<HTMLDivElement | null>, b
 
   return [ref, inView];
 }
-
-// ─── Animated counter ─────────────────────────────────────────────────────
 
 function useAnimatedValue(target: number, triggered: boolean, duration = 900): number {
   const [val, setVal] = useState(0);
@@ -40,11 +36,7 @@ function useAnimatedValue(target: number, triggered: boolean, duration = 900): n
   return val;
 }
 
-// ─── Colour palette (semantic) ────────────────────────────────────────────
-
 const COLORS = ['hsl(var(--primary))', 'hsl(var(--secondary))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
-
-// ─── Source link ──────────────────────────────────────────────────────────
 
 const SourceLink: React.FC<{ label: string; url: string }> = ({ label, url }) => (
   <a
@@ -56,8 +48,6 @@ const SourceLink: React.FC<{ label: string; url: string }> = ({ label, url }) =>
     {label}
   </a>
 );
-
-// ─── Graph card wrapper ───────────────────────────────────────────────────
 
 const GraphCard: React.FC<{
   title: string;
@@ -73,8 +63,6 @@ const GraphCard: React.FC<{
     <p className="text-xs text-muted-foreground">Source: {sources}</p>
   </div>
 );
-
-// ─── Graph 1: Temporal Trends — Line Graph ────────────────────────────────
 
 const TEMPORAL_DATA = [
   { year: 1990, blind: 28.7, msvi: 154, mild: 220, presbyopia: 400 },
@@ -107,18 +95,15 @@ const Graph1: React.FC = () => {
       sources={<SourceLink label="GBD 2019 — The Lancet" url="https://www.thelancet.com/infographics-do/gbd-2019" />}
     >
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" aria-label="Temporal trends line chart">
-        {/* Y gridlines */}
         {[0, 250, 500, 750].map(v => (
           <g key={v}>
             <line x1={PL} y1={yOf(v)} x2={W - PR} y2={yOf(v)} stroke="hsl(var(--border))" strokeWidth="0.5" />
             <text x={PL - 4} y={yOf(v) + 3} textAnchor="end" fontSize="8" fill="hsl(var(--muted-foreground))">{v}</text>
           </g>
         ))}
-        {/* X labels */}
         {TEMPORAL_DATA.map((d, i) => (
           <text key={d.year} x={xOf(i)} y={H - 4} textAnchor="middle" fontSize="9" fill="hsl(var(--muted-foreground))">{d.year}</text>
         ))}
-        {/* Lines — animated by clipping progress */}
         {TEMPORAL_SERIES.map(s => {
           const pts = TEMPORAL_DATA.map((d, i) => `${xOf(i)},${yOf(d[s.key])}`).join(' ');
           const totalLen = 300;
@@ -135,7 +120,6 @@ const Graph1: React.FC = () => {
             />
           );
         })}
-        {/* Dots */}
         {TEMPORAL_SERIES.map(s =>
           TEMPORAL_DATA.map((d, i) => (
             <circle
@@ -149,7 +133,6 @@ const Graph1: React.FC = () => {
           ))
         )}
       </svg>
-      {/* Legend */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
         {TEMPORAL_SERIES.map(s => (
           <div key={s.key} className="flex items-center gap-1.5">
@@ -161,8 +144,6 @@ const Graph1: React.FC = () => {
     </GraphCard>
   );
 };
-
-// ─── Graph 2: Gender Disparity — Paired Bar Chart ─────────────────────────
 
 const GENDER_DATA = [
   { cat: 'Blindness', female: 23.9, male: 19.4 },
@@ -198,10 +179,8 @@ const Graph2: React.FC = () => {
           return (
             <g key={d.cat}>
               <text x={PL - 6} y={y0 + groupH / 2 + 3} textAnchor="end" fontSize="9" fill="hsl(var(--muted-foreground))">{d.cat.length > 18 ? d.cat.slice(0, 18) + '…' : d.cat}</text>
-              {/* Female */}
               <rect x={PL} y={y0} width={(d.female / maxVal) * barW * progress} height={barH} fill={COLORS[0]} rx="1" />
               <text x={PL + (d.female / maxVal) * barW * progress + 3} y={y0 + 10} fontSize="8" fill="hsl(var(--foreground))">{(d.female * progress).toFixed(0)}M</text>
-              {/* Male */}
               <rect x={PL} y={y0 + barH + gap} width={(d.male / maxVal) * barW * progress} height={barH} fill={COLORS[1]} rx="1" />
               <text x={PL + (d.male / maxVal) * barW * progress + 3} y={y0 + barH + gap + 10} fontSize="8" fill="hsl(var(--foreground))">{(d.male * progress).toFixed(0)}M</text>
             </g>
@@ -219,8 +198,6 @@ const Graph2: React.FC = () => {
     </GraphCard>
   );
 };
-
-// ─── Graph 3: Regional Disparities — Horizontal Bar Chart ─────────────────
 
 const REGIONAL_DATA = [
   { region: 'W. Sub-Saharan Africa', val: 11.1 },
@@ -266,8 +243,6 @@ const Graph3: React.FC = () => {
     </GraphCard>
   );
 };
-
-// ─── Graph 4: Children's Vision — Donut Chart ─────────────────────────────
 
 const CHILDREN_DATA = [
   { label: 'Myopia (2023)', val: 65, color: COLORS[0] },
@@ -337,8 +312,6 @@ const Graph4: React.FC = () => {
   );
 };
 
-// ─── Graph 5: Causes of Blindness — Stacked Bar Chart ─────────────────────
-
 const CAUSES_DATA = [
   { cause: 'Cataract', pct: 42.5 },
   { cause: 'Glaucoma', pct: 10 },
@@ -391,8 +364,6 @@ const Graph5: React.FC = () => {
   );
 };
 
-// ─── Graph 6: Myopia Epidemic — Line Graph ────────────────────────────────
-
 const MYOPIA_DATA = [
   { year: 2010, val: 1.6 },
   { year: 2020, val: 2.0 },
@@ -432,7 +403,6 @@ const Graph6: React.FC = () => {
         {MYOPIA_DATA.map((d, i) => (
           <text key={d.year} x={xOf(i)} y={H - 4} textAnchor="middle" fontSize="9" fill="hsl(var(--muted-foreground))">{d.year}</text>
         ))}
-        {/* Area fill */}
         <polyline
           points={`${xOf(0)},${yOf(0)} ` + pts + ` ${xOf(MYOPIA_DATA.length - 1)},${yOf(0)}`}
           fill={COLORS[0]}
@@ -456,8 +426,6 @@ const Graph6: React.FC = () => {
     </GraphCard>
   );
 };
-
-// ─── Main export ──────────────────────────────────────────────────────────
 
 const EyeHealthGraphs: React.FC = () => (
   <div className="flex flex-col gap-6">

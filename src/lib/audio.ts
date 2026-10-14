@@ -1,7 +1,3 @@
-/**
- * Web Audio API beep for timer/exercise completion.
- * Plays a 3-tone ascending sequence (880 → 990 → 1100 Hz).
- */
 export function beepComplete() {
   try {
     const ctx = new AudioContext();
@@ -16,5 +12,6 @@ export function beepComplete() {
       osc.start(ctx.currentTime + offset);
       osc.stop(ctx.currentTime + offset + 0.18);
     });
-  } catch { /* Web Audio not supported */ }
+  } catch {
+  }
 }

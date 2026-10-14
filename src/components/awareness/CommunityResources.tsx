@@ -2,7 +2,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
-// ─── Data ──────────────────────────────────────────────────────────────────
 
 const groups = [
   { name: 'Glaucoma UK Digital Support Groups', platform: 'Zoom', url: 'https://glaucoma.uk/care-support/support-groups/' },
@@ -64,8 +63,6 @@ const apps = [
   },
 ];
 
-// ─── Helpers ───────────────────────────────────────────────────────────────
-
 const ExternalLink: React.FC<{ href: string; label?: string }> = ({ href, label = 'Visit →' }) => (
   <Button asChild variant="outline" size="sm" className="self-start text-xs border-2 border-border mt-auto">
     <a href={href} target="_blank" rel="noopener noreferrer">{label}</a>
@@ -76,8 +73,6 @@ const SectionHeading: React.FC<{ children: React.ReactNode }> = ({ children }) =
   <h4 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-2 mt-4 first:mt-0">{children}</h4>
 );
 
-// ─── Component ────────────────────────────────────────────────────────────
-
 const CommunityResources: React.FC = () => (
   <div className="bg-background border-2 border-border p-5 flex flex-col">
     <h3 className="font-bold text-lg text-foreground mb-1">Community Resources</h3>
@@ -85,7 +80,6 @@ const CommunityResources: React.FC = () => (
       Support groups, newsletters, inspirational stories, and assistive apps for eye health.
     </p>
 
-    {/* Groups */}
     <SectionHeading>Groups</SectionHeading>
     <div className="flex flex-col gap-2 mb-2">
       {groups.map(g => (
@@ -99,7 +93,6 @@ const CommunityResources: React.FC = () => (
       ))}
     </div>
 
-    {/* Newsletters */}
     <SectionHeading>Newsletters</SectionHeading>
     <div className="flex flex-col gap-2 mb-2">
       {newsletters.map(n => (
@@ -110,7 +103,6 @@ const CommunityResources: React.FC = () => (
       ))}
     </div>
 
-    {/* Inspirational */}
     <SectionHeading>Inspirational</SectionHeading>
     <div className="flex flex-col gap-2 mb-2">
       {inspirational.map(s => (
@@ -122,7 +114,6 @@ const CommunityResources: React.FC = () => (
       ))}
     </div>
 
-    {/* Apps */}
     <SectionHeading>Apps</SectionHeading>
     <div className="flex flex-col gap-2">
       {apps.map(a => (

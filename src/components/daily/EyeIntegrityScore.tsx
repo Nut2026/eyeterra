@@ -16,12 +16,10 @@ function computeScore(): { factors: ScoreFactor[]; total: number; maxTotal: numb
   const nutrition = (getLocalToday('nutrition-eaten', []) as string[]).length;
   const workstation = (getLocalToday('workstation-checks', []) as string[]).length;
 
-  // Scoring: 20-20-20=25pts, Exercises=25pts, Nutrition=20pts, Workstation=30pts → 100 total
   const cycleScore = Math.min(cycles * 8, 24);          // max 3 cycles = 24pts (≈25)
   const exerciseScore = Math.min(exercises * 3, 21);    // max 7 ex = 21pts
   const nutritionScore = Math.min(nutrition * 7, 21);   // max 3 foods = 21pts
   const workstationScore = Math.round((workstation / 8) * 34); // max 8 = 34pts
-  // Total max = 24+21+21+34 = 100
 
   const factors: ScoreFactor[] = [
     {
@@ -75,7 +73,6 @@ function getGrade(score: number, max: number): { label: string; desc: string } {
 const EyeIntegrityScore: React.FC = () => {
   const [scoreData, setScoreData] = useState(computeScore);
 
-  // Live-update whenever any habit fires 'eyeterra-score-update'
   useEffect(() => {
     const handler = () => setScoreData(computeScore());
     window.addEventListener('eyeterra-score-update', handler);
@@ -93,7 +90,6 @@ const EyeIntegrityScore: React.FC = () => {
         Updates live as you complete habits. Based on breaks, exercises, nutrition, and workstation setup.
       </p>
 
-      {/* Score ring */}
       <div className="flex items-center gap-6 mb-5">
         <div className="relative shrink-0" aria-label={`Score: ${pct} out of 100`}>
           <svg width="96" height="96" viewBox="0 0 96 96" role="img" aria-hidden="true">
@@ -118,7 +114,6 @@ const EyeIntegrityScore: React.FC = () => {
         </div>
       </div>
 
-      {/* Factor bars */}
       <div className="space-y-3">
         {factors.map(f => (
           <div key={f.label}>

@@ -1,11 +1,8 @@
-/* stylelint-disable */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Eyeterra Design System — Warm cream + sage + terracotta + dusty blue */
 
-/* OpenDyslexic font for accessibility toggle — bundled OTF files */
 @font-face {
   font-family: 'OpenDyslexic';
   src: url('./assets/fonts/OpenDyslexic-Regular.otf') format('opentype');
@@ -39,7 +36,6 @@
   :root {
     --radius: 0.25rem;
 
-    /* Eyeterra warm palette */
     --background: 40 67% 97%;
     --foreground: 20 6% 17%;
     --card: 85 20% 84%;
@@ -121,13 +117,11 @@
     --sidebar-ring: 16 55% 55%;
   }
 
-  /* Dyslexia-friendly override */
   .dyslexia-font,
   .dyslexia-font * {
     font-family: 'OpenDyslexic', sans-serif !important;
   }
 
-  /* ── High Contrast — Light mode ───────────────────────────────────────── */
   .high-contrast:not(.dark) {
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
@@ -149,7 +143,6 @@
     filter: contrast(1.15);
   }
 
-  /* ── High Contrast — Dark mode ────────────────────────────────────────── */
   .dark.high-contrast {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
@@ -171,32 +164,27 @@
     filter: contrast(1.15);
   }
 
-  /* Exclude images, icons, simulator from any HC filter */
   .high-contrast .no-hc-invert,
   .high-contrast img,
   .high-contrast svg image {
     filter: none !important;
   }
 
-  /* Dark HC: untoggled switches get a blue outline so they're visible */
   .dark.high-contrast [role="switch"]:not([data-state="checked"]) {
     outline: 2px solid hsl(210 100% 60%);
     outline-offset: 1px;
   }
 
-  /* Light HC: untoggled switches get a black outline so they're visible */
   .high-contrast:not(.dark) [role="switch"]:not([data-state="checked"]) {
     outline: 2px solid hsl(0 0% 0%);
     outline-offset: 1px;
   }
 
-  /* Dark HC: dropdown separator must be visible */
   .dark.high-contrast [data-radix-dropdown-menu-separator],
   .dark.high-contrast .hc-separator {
     background-color: hsl(0 0% 55%) !important;
   }
 
-  /* Footer "Made with 🧡 by Nuz" — exempt from HC colour shift */
   .high-contrast .hc-footer-exempt {
     filter: none !important;
     color: inherit !important;
@@ -225,17 +213,13 @@
   }
 }
 
-/* ── Print styles for Vision Tour Final Report ────────────────────────────── */
 @media print {
-  /* Hide all chrome: header, footer, sidebar, nav, action buttons */
   header, footer, nav, aside,
   [data-sidebar], [role="navigation"],
   .print\:hidden { display: none !important; }
 
-  /* Reset page background so ink doesn't waste toner */
   body, html { background: white !important; color: black !important; }
 
-  /* Eyeterra logo / branding: pin to top, never centered */
   .print-logo {
     display: block !important;
     position: static !important;
@@ -246,16 +230,13 @@
     font-weight: bold !important;
   }
 
-  /* Make report content full-width */
   main, [role="main"], .max-w-4xl, .max-w-7xl {
     max-width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
   }
 
-  /* Avoid page breaks inside key sections */
   table, .border-2, .space-y-6 > * { page-break-inside: avoid; }
 
-  /* Ensure table borders print */
   table, th, td { border-color: #999 !important; }
 }
