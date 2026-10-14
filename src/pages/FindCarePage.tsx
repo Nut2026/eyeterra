@@ -56,20 +56,27 @@ const FindCarePage: React.FC = () => {
         </div>
 
         {/* Search bar */}
-        <div className="flex gap-2 mb-6 max-w-2xl">
-          <Input
-            value={location}
-            onChange={e => setLocation(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
-            placeholder={
-              mapsAvailable
-                ? 'Enter city, suburb, or postcode…'
-                : "Google Maps is not available for this demo. But don't let that stop you, watch a full-time demo instead!"
-            }
-            className="border-2 border-border text-base"
-            aria-label="Location search"
-            disabled={!mapsAvailable}
-          />
+        <div className="flex gap-2 mb-6 max-w-2xl items-center">
+          {mapsAvailable ? (
+            <Input
+              value={location}
+              onChange={e => setLocation(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSearch()}
+              placeholder="Enter city, suburb, or postcode…"
+              className="border-2 border-border text-base"
+              aria-label="Location search"
+            />
+          ) : (
+            <textarea
+              value={location}
+              readOnly
+              rows={1}
+              placeholder="Google Maps is not available for this demo. But don't let that stop you, watch a full-time demo instead!"
+              className="flex-1 min-h-10 resize-none border-2 border-border bg-transparent px-3 py-2 text-base leading-snug placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-not-allowed"
+              aria-label="Location search (unavailable)"
+              aria-disabled="true"
+            />
+          )}
           <Button
             onClick={handleSearch}
             disabled={loading || !location.trim() || !mapsAvailable}
