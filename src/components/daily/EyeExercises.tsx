@@ -114,12 +114,10 @@ const EyeExercises: React.FC = () => {
     () => getLocalToday('eye-exercises', []) as string[]
   );
   const [activeSteps, setActiveSteps] = useState<string | null>(null);
-  // per-exercise timer state
   const [timerState, setTimerState] = useState<Record<string, ExState>>({});
   const [timerLeft, setTimerLeft] = useState<Record<string, number>>({});
   const intervalRefs = useRef<Record<string, ReturnType<typeof setInterval>>>({});
 
-  // cleanup on unmount
   useEffect(() => {
     return () => { Object.values(intervalRefs.current).forEach(clearInterval); };
   }, []);
@@ -186,7 +184,6 @@ const EyeExercises: React.FC = () => {
         </Button>
       );
     }
-    // running → Restart resets timer and returns to idle
     return (
       <Button size="sm" variant="outline" className="h-7 px-2 text-xs border-2 border-border"
         onClick={() => handleRestart(ex.id)}>
@@ -240,7 +237,6 @@ const EyeExercises: React.FC = () => {
                 </div>
               </div>
 
-              {/* Timer bar — only visible while timer is running */}
               {!isDone && state === 'running' && (
                 <div className="px-3 pb-2">
                   <div className="flex justify-between text-xs text-muted-foreground mb-1">

@@ -26,7 +26,6 @@ const MotilityStop: React.FC<MotilityProps> = ({ onResult, initialValue }) => {
   const [reportedIssues, setReportedIssues] = useState<string[]>(() => {
     try { return initialValue ? JSON.parse(initialValue) : []; } catch { return []; }
   });
-  // If we have a previous answer, go straight to assess phase
   const [phase, setPhase] = useState<'tracking' | 'assess' | 'done'>(initialValue !== undefined ? 'assess' : 'tracking');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);

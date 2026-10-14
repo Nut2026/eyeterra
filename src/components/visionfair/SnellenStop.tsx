@@ -19,9 +19,6 @@ const lines = [
   { size: 8, letters: 'DEFPOTEC', acuity: '20/20', label: "Line 8 (20/20) \u2014 Normal" },
   { size: 6, letters: 'LEFODPCT', acuity: '20/15', label: 'Line 9 (20/15) — Better than average' },
 ];
-
-// '' = nothing selected yet (only state that disables submit)
-// 'none' = user selected "I couldn't read any line clearly" — valid answer
 const SnellenStop: React.FC<SnellenProps> = ({ onResult, initialValue }) => {
   const [lastClear, setLastClear] = useState<string>(initialValue ?? '');
 
@@ -49,7 +46,6 @@ const SnellenStop: React.FC<SnellenProps> = ({ onResult, initialValue }) => {
         </ol>
       </div>
 
-      {/* Chart */}
       <div className="bg-foreground text-background p-5 border-2 border-border flex flex-col items-center gap-1 select-none" aria-label="Snellen eye chart">
         {lines.map(line => (
           <p
@@ -63,7 +59,6 @@ const SnellenStop: React.FC<SnellenProps> = ({ onResult, initialValue }) => {
         ))}
       </div>
 
-      {/* Selection */}
       <div>
         <p className="text-sm font-semibold text-foreground mb-1">
           {"What's the smallest line you can read clearly?"}

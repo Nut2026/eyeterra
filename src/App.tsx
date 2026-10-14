@@ -18,8 +18,6 @@ const PageFallback = () => (
 );
 
 const App: React.FC = () => {
-  // BASE_URL is "/" locally and "/<repo-name>/" on the GitHub Pages build,
-  // so client-side routing works in both environments.
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ErrorBoundary>

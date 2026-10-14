@@ -27,7 +27,6 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
     r.value.toLowerCase().includes('20/200')
   );
 
-  // null = idle, true = copied OK, false = failed
   const [copyState, setCopyState] = useState<boolean | null>(null);
 
   const handlePrint = () => window.print();
@@ -45,7 +44,6 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
 
   return (
     <div className="space-y-6">
-      {/* Print-only header: icon top-left, hidden on screen */}
       <div className="hidden print:flex print:items-center print:gap-3 print-logo">
         <img
           src={eyeterraIcon}
@@ -55,7 +53,6 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
         <span style={{ fontWeight: 700, fontSize: 18 }}>Eyeterra — Vision Tour Report</span>
       </div>
 
-      {/* Summary banner */}
       <div className={`border-2 px-5 py-4 ${urgentConcerns.length > 0 ? 'border-destructive bg-destructive/5' : hasConcerns ? 'border-primary bg-primary/5' : 'border-border bg-muted/30'}`}>
         <h3 className="font-bold text-lg text-foreground mb-1 text-balance">
           {urgentConcerns.length > 0
@@ -73,7 +70,6 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
         </p>
       </div>
 
-      {/* Results table */}
       <div>
         <h4 className="font-semibold text-foreground mb-3">Your Results by Stop</h4>
         <div className="overflow-x-auto">
@@ -106,7 +102,6 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
         </div>
       </div>
 
-      {/* Recommendations */}
       <div className="border-2 border-border p-5 bg-card">
         <h4 className="font-semibold text-foreground mb-3">Recommendations</h4>
         <ul className="space-y-2">
@@ -133,14 +128,12 @@ const FinalReport: React.FC<ReportProps> = ({ results, onRestart }) => {
         </ul>
       </div>
 
-      {/* Disclaimer */}
       <div className="border border-border bg-muted/30 px-4 py-3">
         <p className="text-xs text-muted-foreground italic text-pretty">
           These results are for educational and informational purposes only. This is not a clinical examination or medical diagnosis. Vision Tour cannot detect all eye conditions. Always consult a licensed optometrist or ophthalmologist for professional evaluation.
         </p>
       </div>
 
-      {/* Actions */}
       <div className="flex flex-wrap gap-3 print:hidden">
         <Button onClick={handlePrint} variant="outline" className="border-2 border-border">
           🖨 Download/Print Results

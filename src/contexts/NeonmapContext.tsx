@@ -4,7 +4,6 @@ import { supabase } from '@/db/supabase';
 import { useAccessibility } from './AccessibilityContext';
 
 interface NeonmapContextType {
-  /** Whether the heatmap canvas is currently displayed. */
   heatmapVisible: boolean;
 }
 
@@ -21,18 +20,12 @@ function getSessionId(): string {
   return sid;
 }
 
-/**
- * Easter egg: anonymous click heatmap ("Click Neonmap").
- * Clicks are recorded per page; when the toggle is on, the last 1000
- * clicks for the current page are drawn as a radial-gradient canvas overlay.
- */
 export const NeonmapProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { neonmap } = useAccessibility();
   const [heatmapVisible, setHeatmapVisible] = React.useState(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const location = useLocation();
 
-  // Track clicks globally
   useEffect(() => {
     const handleClick = async (e: MouseEvent) => {
       const db = supabase;
@@ -93,7 +86,6 @@ export const NeonmapProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [neonmap, removeCanvas]);
 
-  // Show the heatmap when neonmap is on; remove the canvas when it's off
   useEffect(() => {
     if (neonmap) {
       setHeatmapVisible(true);
@@ -104,7 +96,6 @@ export const NeonmapProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [neonmap, renderHeatmap]);
 
-  // Re-render on every route change while neonmap is on
   useEffect(() => {
     if (!neonmap) return;
     renderHeatmap();

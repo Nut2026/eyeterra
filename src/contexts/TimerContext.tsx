@@ -32,9 +32,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [secondsLeft, setSecondsLeft] = useState(WORK_SECS);
   const [running, setRunning]     = useState(false);
 
-  // ── Timestamp-based accuracy ──────────────────────────────────────────────
-  // phaseStartTime: Date.now() when the current phase began (adjusted for pauses)
-  // pausedAt: Date.now() when we last paused (null if not paused)
   const phaseStartTimeRef = useRef<number>(0);
   const pausedAtRef       = useRef<number | null>(null);
   const phaseRef          = useRef<TimerPhase>(phase);
@@ -52,7 +49,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     window.dispatchEvent(new CustomEvent('eyeterra-score-update'));
   }, []);
 
-  // ── Update document title ─────────────────────────────────────────────────
   const updateTitle = useCallback((p: TimerPhase, secs: number) => {
     if (p === 'idle') {
       document.title = DEFAULT_TITLE;
@@ -64,13 +60,8 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, []);
 
-  // Restore title on unmount
   useEffect(() => () => { document.title = DEFAULT_TITLE; }, []);
 
-  // ── Visibility API: force-refresh title immediately when tab becomes visible ─
-  // setInterval is throttled by browsers when the tab is backgrounded, causing
-  // stale titles. Re-computing from the stored timestamp on visibilitychange
-  // ensures the title is always accurate the moment the user returns.
   useEffect(() => {
     const onVisibilityChange = () => {
       if (document.visibilityState !== 'visible' || !runningRef.current) return;
@@ -83,9 +74,6 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => document.removeEventListener('visibilitychange', onVisibilityChange);
   }, [updateTitle]);
 
-  // ── Tick loop using setInterval for rendering only ────────────────────────
-  // All time logic is derived from Date.now() - phaseStartTime, NOT from
-  // accumulating 1-second decrements. This survives tab throttling / sleep.
   useEffect(() => {
     if (!running) {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -131,12 +119,10 @@ export const TimerProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           setSecondsLeft(WORK_SECS);
           phaseStartTimeRef.current = Date.now();
         } else if (pausedAtRef.current !== null) {
-          // Resume: shift phaseStartTime forward by the paused duration
           phaseStartTimeRef.current += Date.now() - pausedAtRef.current;
           pausedAtRef.current = null;
         }
       } else {
-        // Pausing
         pausedAtRef.current = Date.now();
       }
       return nowRunning;

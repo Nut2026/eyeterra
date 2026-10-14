@@ -38,8 +38,6 @@ function saveProgress(lastStop: number, results: VFResult[], rawAnswers: Record<
 function clearProgress() {
   try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
 }
-
-// currentStop: 0 = intro, 1–6 = active stops, 7 = final report
 const VisionFairPage: React.FC = () => {
   const saved = loadProgress();
 
@@ -50,7 +48,6 @@ const VisionFairPage: React.FC = () => {
   const savedLastStop = saved?.lastStop ?? null;
   const hasSavedProgress = savedLastStop !== null;
 
-  // Persist whenever the active stop or answers change
   useEffect(() => {
     if (currentStop >= 1 && currentStop <= TOTAL_TEST_STOPS) {
       saveProgress(currentStop, results, rawAnswers);
@@ -81,7 +78,6 @@ const VisionFairPage: React.FC = () => {
 
   const currentStopInfo = stops.find(s => s.id === currentStop) ?? null;
 
-  // ── Stop content renderer ────────────────────────────────────────────────
   const renderStop = () => {
     const raw = (id: number) => rawAnswers[id];
     switch (currentStop) {

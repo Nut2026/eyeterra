@@ -8,7 +8,6 @@ interface PupilProps {
 }
 
 const PupilStop: React.FC<PupilProps> = ({ onResult, initialValue }) => {
-  // initialValue format: "5|5|equal"
   const [leftSize, setLeftSize] = useState(() => {
     const parts = initialValue?.split('|');
     return parts ? parseFloat(parts[0]) || 5 : 5;
@@ -27,19 +26,14 @@ const PupilStop: React.FC<PupilProps> = ({ onResult, initialValue }) => {
   const concern = diff > 1;
 
   const handleSubmit = () => {
-    // Conflict resolution: always assume worst case.
-    // If slider shows diff > 1 mm (dangerous), flag concern even if MCQ says "equal".
-    // If MCQ says unequal, flag concern even if slider diff is small.
     const sliderConcern = diff > 1;
     const mcqConcern    = selfReport === 'left-larger' || selfReport === 'right-larger';
     const finalConcern  = sliderConcern || mcqConcern;
 
-    // Build value text reflecting the actual final outcome
     let value: string;
     if (sliderConcern) {
       value = `Left: ${leftSize}mm, Right: ${rightSize}mm — Difference: ${diff.toFixed(1)}mm`;
     } else if (mcqConcern) {
-      // Slider ≤1 mm but MCQ reports unequal — trust MCQ
       value = `Left: ${leftSize}mm, Right: ${rightSize}mm — Reported unequal by self-assessment`;
     } else {
       value = `Left: ${leftSize}mm, Right: ${rightSize}mm — Equal (≤1mm difference)`;

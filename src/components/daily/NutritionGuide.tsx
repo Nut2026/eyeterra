@@ -81,7 +81,6 @@ const NutritionGuide: React.FC = () => {
       <div className="grid grid-cols-1 gap-3">
         {nutrients.map(n => (
           <div key={n.name} className="border-2 border-border bg-muted/30">
-            {/* Nutrient header — always visible */}
             <div className="p-3 flex items-start gap-3">
               <span className="text-xl shrink-0 mt-0.5" aria-hidden="true">{n.icon}</span>
               <div className="flex-1 min-w-0">
@@ -89,7 +88,6 @@ const NutritionGuide: React.FC = () => {
                 <p className="text-xs text-muted-foreground text-pretty">{n.why}</p>
               </div>
             </div>
-            {/* Food checklist — always open */}
             <div className="border-t-2 border-border px-4 py-3 bg-background">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                 Top food sources

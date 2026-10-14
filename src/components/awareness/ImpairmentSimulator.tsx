@@ -5,8 +5,6 @@ import { Badge } from '@/components/ui/badge';
 import sampleImage1 from '@/assets/sample-image-1.png';
 import sampleImage2 from '@/assets/sample-image-2.png';
 
-// ─── Impairment definitions ────────────────────────────────────────────────
-
 type ColourBlindType = 'deuteranopia' | 'protanopia' | 'tritanopia';
 
 interface ImpairmentDef {
@@ -18,8 +16,8 @@ interface ImpairmentDef {
   sliderMax?: number;
   sliderStep?: number;
   sliderUnit?: string;
-  sliderLabels?: string[];        // discrete label overrides
-  defaultValue: number;           // preset on add (lowest non-zero)
+  sliderLabels?: string[];
+  defaultValue: number;
 }
 
 const IMPAIRMENTS: ImpairmentDef[] = [
@@ -28,7 +26,7 @@ const IMPAIRMENTS: ImpairmentDef[] = [
     label: 'Myopia',
     description: 'Distant objects appear blurred; close objects remain clear.',
     hasSlider: true, sliderMin: 0, sliderMax: 40, sliderStep: 1, sliderUnit: 'D',
-    defaultValue: 1, // represents -0.25D per step
+    defaultValue: 1,
   },
   {
     id: 'hyperopia',
@@ -69,90 +67,48 @@ const IMPAIRMENTS: ImpairmentDef[] = [
   },
 ];
 
-// ─── Active impairment state ──────────────────────────────────────────────
-
 interface ActiveImpairment {
   id: string;
   value: number;
   cbType?: ColourBlindType;
 }
 
-// ─── Depth-dependent blur: layered CSS img approach ───────────────────────
-//
-// ── MYOPIA (negative diopters) ────────────────────────────────────────────
-//   Optical model in dioptre-space (avoids linear-distance scale mismatch):
-//     objectD   = 1 / depth          (depth in metres → dioptre demand)
-//     focusD    = 1 / focusDepth     = |diopters|
-//     defocus   = | objectD − focusD |  (dioptres off-focus)
-//
-//   Accommodation handling: objects CLOSER than focusDepth (objectD > focusD)
-//   are within the accommodation range for mild prescriptions.  A 3D
-//   accommodation buffer lets the eye pull near objects into focus at low
-//   powers; the buffer disappears as prescription grows.
-//     nearDefocus = max(0,  objectD − focusD − accomBuffer)
-//     farDefocus  = objectD < focusD  ?  focusD − objectD  :  0
-//     blurPx = (nearDefocus + farDefocus) × SCALE_D, capped at MAX_BLUR
-//
-//   Calibration (SCALE_D = 3):
-//     −0.25D, mountain @ 50 m:  focusD=0.25,  objectD=0.02  → 0.23D × 3 ≈ 0.7 px  ✓
-//     −3D,    mountain @ 50 m:  focusD=3,     objectD=0.02  → 2.98D × 3 ≈ 9 px    ✓
-//     −3D,    book    @ 0.3 m:  objectD=3.33  > focusD=3,
-//                                nearBuf=3 → defocus= max(0,0.33-3)=0 → 0 px       ✓ clear
-//     −8D,    book    @ 0.3 m:  objectD=3.33  < focusD=8 → 4.67D × 3 ≈ 14 px     ✓
-//     −10D,   mountain @ 50m:   9.98D × 3 = 30 px (capped)                         ✓
-//
-// ── HYPEROPIA (positive diopters) ─────────────────────────────────────────
-//   Screen-space model (depth-space gives wrong coverage percentages):
-//     clearFraction = exp(−0.2 × H)   fraction of screen from top that stays clear
-//     At +0.5D: 90% clear  (+0.5D: 10% bottom blurry)
-//     At +3.0D: 55% clear  (45% bottom blurry)
-//     At +6.0D: 30% clear  (70% bottom blurry)
-//     At +10D:  14% clear  (86% bottom blurry)
-//   Below the clear zone blur ramps linearly to maxBlur=H×3 at y=1 (bottom).
+const SCALE_D = 3;
+const MAX_BLUR = 30;
+const ACCOM_BUF = 3.0;
 
-const SCALE_D  = 3;     // px per dioptre of defocus
-const MAX_BLUR = 30;    // px hard cap
-const ACCOM_BUF = 3.0;  // dioptre accommodation buffer (near-object protection)
-
-// depth(yFrac): 0=top/far(50 m), 1=bottom/near(0.3 m)
 function depthAt(yFrac: number): number {
   return 0.3 + (1 - yFrac) * 49.7;
 }
 
-// Myopia blur in dioptre-space at a given y-fraction
 function myopiaBlurAtY(yFrac: number, absDiopters: number): number {
-  const focusD  = absDiopters;                  // = 1 / focusDepth
-  const objectD = 1 / depthAt(yFrac);           // dioptre demand of scene object
+  const focusD = absDiopters;
+  const objectD = 1 / depthAt(yFrac);
   let defocus: number;
   if (objectD > focusD) {
-    // Object is CLOSER than focal point → near-defocus, muted by accommodation
     defocus = Math.max(0, objectD - focusD - ACCOM_BUF);
   } else {
-    // Object is FARTHER than focal point → always blurs
     defocus = focusD - objectD;
   }
   return Math.min(defocus * SCALE_D, MAX_BLUR);
 }
 
 interface BlurLayer {
-  blur: number;   // CSS blur px for this img copy
-  mask: string;   // CSS gradient string for mask-image
+  blur: number;
+  mask: string;
 }
 
-const BLUR_LEVELS = [1, 3, 6, 12, 22]; // px thresholds — 5 overlay layers
-const FEATHER     = 0.10;              // 10% soft-edge on each gradient
+const BLUR_LEVELS = [1, 3, 6, 12, 22];
+const FEATHER = 0.10;
 
-// ── Myopia layer builder ──────────────────────────────────────────────────
 function computeMyopiaLayers(absDiopters: number): BlurLayer[] {
   const layers: BlurLayer[] = [];
 
   for (const targetBlur of BLUR_LEVELS) {
-    // Blurry zone is at TOP for myopia (far objects, y≈0).
-    // Binary-search for y-threshold where myopiaBlurAtY(y) == targetBlur.
-    // blur is HIGH at y=0, LOW at y=1 → decreasing function.
-    if (myopiaBlurAtY(0, absDiopters) < targetBlur) break; // max blur not reached
+    if (myopiaBlurAtY(0, absDiopters) < targetBlur) break;
 
-    let lo = 0, hi = 1;
+    let lo = 0;
+    let hi = 1;
     for (let i = 0; i < 40; i++) {
       const mid = (lo + hi) / 2;
       if (myopiaBlurAtY(mid, absDiopters) > targetBlur) lo = mid;
@@ -160,10 +116,10 @@ function computeMyopiaLayers(absDiopters: number): BlurLayer[] {
     }
     const yThreshold = (lo + hi) / 2;
 
-    const coverPct  = Math.round(yThreshold * 100);
+    const coverPct = Math.round(yThreshold * 100);
     const featherPx = Math.round(FEATHER * 100);
-    const fadeStart = Math.max(0,   coverPct - featherPx);
-    const fadeEnd   = Math.min(100, coverPct + Math.round(featherPx * 0.5));
+    const fadeStart = Math.max(0, coverPct - featherPx);
+    const fadeEnd = Math.min(100, coverPct + Math.round(featherPx * 0.5));
     const mask = `linear-gradient(to bottom, black 0%, black ${fadeStart}%, transparent ${fadeEnd}%)`;
 
     layers.push({ blur: targetBlur, mask });
@@ -171,29 +127,22 @@ function computeMyopiaLayers(absDiopters: number): BlurLayer[] {
   return layers;
 }
 
-// ── Hyperopia layer builder (screen-space) ────────────────────────────────
 function computeHyperopiaLayers(absDiopters: number): BlurLayer[] {
-  // Fraction of screen height (from top) that stays clear
   const clearFraction = Math.exp(-0.2 * absDiopters);
-  // Max blur at the very bottom, proportional to prescription
   const maxBlurH = Math.min(absDiopters * 5, MAX_BLUR);
 
   const layers: BlurLayer[] = [];
 
   for (const targetBlur of BLUR_LEVELS) {
-    if (targetBlur > maxBlurH) break; // this level unreachable
+    if (targetBlur > maxBlurH) break;
 
-    // y-fraction where screen-space blur reaches targetBlur:
-    //   blurAtY(y) = max(0, (y - clearFraction)/(1-clearFraction)) * maxBlurH = targetBlur
-    //   (y - clearFraction) = targetBlur/maxBlurH * (1-clearFraction)
     const yThreshold = clearFraction + (targetBlur / maxBlurH) * (1 - clearFraction);
-    if (yThreshold >= 1) break; // beyond bottom of image
+    if (yThreshold >= 1) break;
 
-    // Blurry zone occupies BOTTOM (y=yThreshold..1), clear at TOP
-    const startPct  = Math.round(yThreshold * 100);
+    const startPct = Math.round(yThreshold * 100);
     const featherPx = Math.round(FEATHER * 100);
-    const fadeStart = Math.max(0,   startPct - featherPx);
-    const fadeEnd   = Math.min(100, startPct + Math.round(featherPx * 0.5));
+    const fadeStart = Math.max(0, startPct - featherPx);
+    const fadeEnd = Math.min(100, startPct + Math.round(featherPx * 0.5));
     const mask = `linear-gradient(to top, black 0%, black ${Math.max(0, 100 - fadeEnd)}%, transparent ${Math.max(0, 100 - fadeStart)}%)`;
 
     layers.push({ blur: targetBlur, mask });
@@ -209,7 +158,6 @@ function computeBlurLayers(diopters: number): BlurLayer[] {
     : computeHyperopiaLayers(absDiopters);
 }
 
-// React component: renders one <img> per blur layer stacked on a sharp base.
 interface DepthBlurImageProps {
   src: string;
   diopters: number;
@@ -224,11 +172,8 @@ const DepthBlurImage: React.FC<DepthBlurImageProps> = ({ src, diopters, classNam
     width: '100%', height: '100%', objectFit: 'cover',
   };
   return (
-    // overflow:hidden clips the CSS blur bleed at container edges
     <div style={{ position: 'relative', overflow: 'hidden', ...style }} className={className}>
-      {/* Base: sharp image fills the container */}
       <img src={src} alt={alt ?? ''} style={sharedImgStyle} className="no-hc-invert" />
-      {/* Overlay layers: each adds progressively more blur to a depth zone */}
       {layers.map((layer, i) => (
         <img
           key={i}
@@ -252,13 +197,11 @@ const DepthBlurImage: React.FC<DepthBlurImageProps> = ({ src, diopters, classNam
   );
 };
 
-// ─── Compute combined CSS filter + overlay for a set of active impairments ──
-
 function computeVisual(active: ActiveImpairment[]): {
   imgFilter: string;
   containerFilter: string;
   overlays: { id: string; jsx: React.ReactNode }[];
-  depthDiopters: number | null;   // non-null → use DepthBlurImage instead of <img>
+  depthDiopters: number | null;
 } {
   let blurPx = 0;
   let contrastMul = 1;
@@ -273,11 +216,9 @@ function computeVisual(active: ActiveImpairment[]): {
     const v = imp.value;
 
     if (t === 'myopia') {
-      // Steps 0–40, each step = -0.25 D
       const diopters = -(v * 0.25);
       if (v > 0) depthDiopters = (depthDiopters ?? 0) + diopters;
     } else if (t === 'hyperopia') {
-      // Steps 0–24, each step = +0.25 D
       const diopters = v * 0.25;
       if (v > 0) depthDiopters = (depthDiopters ?? 0) + diopters;
     } else if (t === 'glaucoma') {
@@ -299,9 +240,9 @@ function computeVisual(active: ActiveImpairment[]): {
       const levels = [0, 0.25, 0.55, 0.9];
       const r = levels[Math.min(v, 3)];
       blurPx += r * 2.5;
-      contrastMul  *= 1 - r * 0.4;
+      contrastMul *= 1 - r * 0.4;
       brightnessMul *= 1 + r * 0.45;
-      saturateMul  *= 1 - r * 0.55;
+      saturateMul *= 1 - r * 0.55;
     } else if (t === 'diabetic') {
       const levels = [0, 0.3, 0.6, 1.0];
       const r = levels[Math.min(v, 3)];
@@ -333,17 +274,15 @@ function computeVisual(active: ActiveImpairment[]): {
 
   const parts: string[] = [];
   if (blurPx > 0) parts.push(`blur(${blurPx.toFixed(2)}px)`);
-  if (Math.abs(contrastMul  - 1) > 0.001) parts.push(`contrast(${contrastMul.toFixed(3)})`);
+  if (Math.abs(contrastMul - 1) > 0.001) parts.push(`contrast(${contrastMul.toFixed(3)})`);
   if (Math.abs(brightnessMul - 1) > 0.001) parts.push(`brightness(${brightnessMul.toFixed(3)})`);
-  if (Math.abs(saturateMul  - 1) > 0.001) parts.push(`saturate(${saturateMul.toFixed(3)})`);
+  if (Math.abs(saturateMul - 1) > 0.001) parts.push(`saturate(${saturateMul.toFixed(3)})`);
 
   const imgFilter = parts.join(' ');
   const containerFilter = cbType ? `url('#${cbType}-filter')` : '';
 
   return { imgFilter, containerFilter, overlays, depthDiopters };
 }
-
-// ─── Per-image panel ───────────────────────────────────────────────────────
 
 interface ImagePanelProps {
   label: string;
@@ -424,7 +363,6 @@ const ImagePanel: React.FC<ImagePanelProps> = ({ label, src, uploadSlot, onUploa
 
   return (
     <div className="border-2 border-border bg-card p-4 flex flex-col gap-3">
-      {/* Header */}
       <div className="flex items-center justify-between gap-2">
         <span className="font-semibold text-sm text-foreground">{label}</span>
         <Button
@@ -438,7 +376,6 @@ const ImagePanel: React.FC<ImagePanelProps> = ({ label, src, uploadSlot, onUploa
         </Button>
       </div>
 
-      {/* Image — use DepthBlurImage for refractive errors, plain <img> otherwise */}
       {src ? (
         <div
           className="relative overflow-hidden border border-border aspect-video w-full bg-muted"
@@ -495,7 +432,6 @@ const ImagePanel: React.FC<ImagePanelProps> = ({ label, src, uploadSlot, onUploa
         </>
       )}
 
-      {/* Active impairments */}
       {active.length > 0 && (
         <div className="flex flex-col gap-2">
           {active.map(imp => {
@@ -555,7 +491,6 @@ const ImagePanel: React.FC<ImagePanelProps> = ({ label, src, uploadSlot, onUploa
         </div>
       )}
 
-      {/* Add impairment */}
       {available.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {available.map(def => (
@@ -572,8 +507,6 @@ const ImagePanel: React.FC<ImagePanelProps> = ({ label, src, uploadSlot, onUploa
     </div>
   );
 };
-
-// ─── Main component ────────────────────────────────────────────────────────
 
 const SAMPLE_IMAGE = sampleImage1;
 const SAMPLE_IMAGE_2 = sampleImage2;
