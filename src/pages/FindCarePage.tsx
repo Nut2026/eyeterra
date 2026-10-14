@@ -3,7 +3,7 @@ import MainLayout from '@/components/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const FIND_CARE_YT_URL = 'https://youtu.be/B6IOmb6mBMA';
+const FIND_CARE_YT_URL = 'https://www.youtube.com/embed/B6IOmb6mBMA';
 
 function getMapsAvailability() {
   if (!import.meta.env.VITE_GOOGLE_MAPS_API_KEY) {
