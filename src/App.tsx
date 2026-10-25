@@ -17,10 +17,16 @@ const PageFallback = () => (
   </div>
 );
 
+const APP_TOP = 0;
+
 const App: React.FC = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      const doc = document.documentElement;
+      doc.scrollTop = APP_TOP;
+      doc.scrollLeft = APP_TOP;
+      window.scrollTo({ top: APP_TOP, left: APP_TOP, behavior: 'instant' });
+      window.scrollTo(APP_TOP, APP_TOP);
     }
   }, []);
 
