@@ -112,9 +112,8 @@ const MotilityStop: React.FC<MotilityProps> = ({ onResult, initialValue }) => {
           </div>
           <div className="flex gap-2 flex-wrap">
             <Button onClick={() => handleSubmit()} className="border-2 border-primary mt-2">Save &amp; Continue</Button>
-            {reportedIssues.length === 0 && (
-              <Button variant="outline" className="border-2 border-border mt-2 ml-2" onClick={() => { setReportedIssues([]); handleSubmit([]); }}>
-                No Issues — Continue
+            {reportedIssues.length === 0 && (                <Button variant="outline" className="border-2 border-border mt-2 ml-2" onClick={() => { setReportedIssues([]); handleSubmit([]); }}>
+                Nothing — Continue
               </Button>
             )}
           </div>

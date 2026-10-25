@@ -78,10 +78,10 @@ const PupilStop: React.FC<PupilProps> = ({ onResult, initialValue }) => {
         </div>
       </div>
 
-      <div className={`border-2 px-4 py-3 ${diff > 1 ? 'border-destructive bg-destructive/5' : 'border-border bg-muted/30'}`}>
+      <div className="border-2 px-4 py-3 border-border bg-muted/30">
         <p className="text-sm font-semibold">
           Difference: {diff.toFixed(1)}mm —{' '}
-          {diff === 0 ? 'Perfectly equal' : diff <= 0.5 ? 'Normal variation' : diff <= 1 ? 'Acceptable range' : '⚠ May warrant evaluation'}
+          {diff === 0 ? 'Perfectly equal' : diff <= 0.5 ? 'Normal variation' : diff <= 1 ? 'Acceptable range' : 'May warrant evaluation'}
         </p>
       </div>
 
@@ -89,9 +89,9 @@ const PupilStop: React.FC<PupilProps> = ({ onResult, initialValue }) => {
         <p className="text-sm font-semibold text-foreground">How do your pupils look to you?</p>
         <div className="flex flex-col gap-2">
           {[
-            { val: 'equal', label: '✅ Both pupils look the same size' },
-            { val: 'left-larger', label: '⚠ Left pupil appears noticeably larger' },
-            { val: 'right-larger', label: '⚠ Right pupil appears noticeably larger' },
+            { val: 'equal', label: 'Both pupils look the same size' },
+            { val: 'left-larger', label: 'Left pupil appears noticeably larger' },
+            { val: 'right-larger', label: 'Right pupil appears noticeably larger' },
           ].map(opt => (
             <button
               key={opt.val}

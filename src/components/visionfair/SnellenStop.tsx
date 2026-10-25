@@ -16,8 +16,8 @@ const lines = [
   { size: 17, letters: 'PECFD', acuity: '20/40', label: 'Line 5 (20/40)' },
   { size: 13, letters: 'EDFCZP', acuity: '20/30', label: 'Line 6 (20/30)' },
   { size: 10, letters: 'FELOPZD', acuity: '20/25', label: 'Line 7 (20/25)' },
-  { size: 8, letters: 'DEFPOTEC', acuity: '20/20', label: "Line 8 (20/20) \u2014 Normal" },
-  { size: 6, letters: 'LEFODPCT', acuity: '20/15', label: 'Line 9 (20/15) — Better than average' },
+  { size: 8, letters: 'DEFPOTEC', acuity: '20/20', label: "Line 8 (20/20)" },
+  { size: 6, letters: 'LEFODPCT', acuity: '20/15', label: 'Line 9 (20/15)' },
 ];
 const SnellenStop: React.FC<SnellenProps> = ({ onResult, initialValue }) => {
   const [lastClear, setLastClear] = useState<string>(initialValue ?? '');
@@ -59,13 +59,9 @@ const SnellenStop: React.FC<SnellenProps> = ({ onResult, initialValue }) => {
         ))}
       </div>
 
-      <div>
-        <p className="text-sm font-semibold text-foreground mb-1">
+      <div>        <p className="text-sm font-semibold text-foreground mb-1">
           {"What's the smallest line you can read clearly?"}
         </p>
-        {lastClear === '' && (
-          <p className="text-xs text-muted-foreground mb-2">← Select one option below to continue</p>
-        )}
         <RadioGroup value={lastClear} onValueChange={setLastClear} className="gap-1">
           <div className="flex items-center gap-2">
             <RadioGroupItem value="none" id="snellen-none" />

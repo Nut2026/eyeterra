@@ -60,13 +60,11 @@ const SymptomStop: React.FC<SymptomProps> = ({ onResult, initialValue }) => {
 
       <div className="space-y-2">
         {questions.map((q, i) => (
-          <div key={q.id} className={`border-2 p-3 transition-colors ${
-            answers[q.id] === 'yes' ? q.urgent ? 'border-destructive bg-destructive/5' : 'border-primary bg-primary/5'
-            : answers[q.id] === 'no' ? 'border-border bg-muted/20' : 'border-border'
+          <div key={q.id} className={`border-2 p-3 ${
+            answers[q.id] === 'no' ? 'border-border bg-muted/20' : 'border-border'
           }`}>
             <p className="text-sm text-foreground mb-2">
               <span className="font-semibold text-muted-foreground mr-2">{i + 1}.</span>
-              {q.urgent && <span className="text-destructive font-bold mr-1">⚠</span>}
               {q.text}
             </p>
             <div className="flex gap-2">
@@ -92,15 +90,7 @@ const SymptomStop: React.FC<SymptomProps> = ({ onResult, initialValue }) => {
         <span className="text-sm text-muted-foreground">{answered}/{questions.length} answered</span>
       </div>
 
-      {urgentYes.length > 0 && (
-        <div className="border-2 border-destructive bg-destructive/5 px-4 py-3">
-          <p className="font-semibold text-sm text-foreground mb-1">Urgent symptoms noted:</p>
-          <ul className="list-disc list-inside space-y-0.5">
-            {urgentYes.map(q => <li key={q.id} className="text-sm text-destructive">{q.text}</li>)}
-          </ul>
-          <p className="text-sm text-destructive mt-1 font-semibold">Please seek professional eye care promptly.</p>
-        </div>
-      )}    </div>
+    </div>
   );
 };
 

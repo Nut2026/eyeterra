@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import eyeterraIcon from '@/assets/eyeterra-icon.png';
@@ -32,6 +32,7 @@ const MenuIcon = () => (
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
@@ -47,6 +48,7 @@ const Header: React.FC = () => {
             <Link
               key={link.path}
               to={link.path}
+              onClick={() => navigate(link.path, { replace: true, scroll: false })}
               className={`px-3 py-1.5 text-sm font-medium border-2 transition-colors ${
                 location.pathname === link.path
                   ? 'bg-primary text-primary-foreground border-primary'
@@ -83,7 +85,7 @@ const Header: React.FC = () => {
                   <Link
                     key={link.path}
                     to={link.path}
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => { setMobileOpen(false); navigate(link.path, { replace: true, scroll: false }); }}
                     className={`px-4 py-3 text-base font-medium border-2 transition-colors ${
                       location.pathname === link.path
                         ? 'bg-primary text-primary-foreground border-primary'

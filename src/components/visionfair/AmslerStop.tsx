@@ -100,8 +100,8 @@ const AmslerStop: React.FC<AmslerProps> = ({ onResult, initialValue }) => {
         <p className="text-sm font-semibold text-foreground">When looking at the centre dot, did the grid appear:</p>
         <div className="flex flex-col gap-2">
           {[
-            { val: false, label: '✅ Completely straight and regular — no distortions' },
-            { val: true, label: '⚠ Wavy, bent, blurred, or missing areas present' },
+            { val: false, label: 'Completely straight and regular — no distortions' },
+            { val: true, label: 'Wavy, bent, blurred, or missing areas present' },
           ].map(opt => (
             <button
               key={String(opt.val)}
