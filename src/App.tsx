@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AccessibilityProvider } from '@/contexts/AccessibilityContext';
 import { NeonmapProvider } from '@/contexts/NeonmapContext';
@@ -18,6 +18,12 @@ const PageFallback = () => (
 );
 
 const App: React.FC = () => {
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+  }, []);
+
   return (
     <Router basename={import.meta.env.BASE_URL}>
       <ErrorBoundary>
