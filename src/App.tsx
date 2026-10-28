@@ -1,5 +1,5 @@
-import React, { Suspense, lazy, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { Suspense, lazy, useLayoutEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AccessibilityProvider } from '@/contexts/AccessibilityContext';
 import { NeonmapProvider } from '@/contexts/NeonmapContext';
 import { TimerProvider } from '@/contexts/TimerContext';
@@ -17,21 +17,21 @@ const PageFallback = () => (
   </div>
 );
 
-const APP_TOP = 0;
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+
+  return null;
+};
 
 const App: React.FC = () => {
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const doc = document.documentElement;
-      doc.scrollTop = APP_TOP;
-      doc.scrollLeft = APP_TOP;
-      window.scrollTo({ top: APP_TOP, left: APP_TOP, behavior: 'instant' });
-      window.scrollTo(APP_TOP, APP_TOP);
-    }
-  }, []);
-
   return (
     <Router basename={import.meta.env.BASE_URL}>
+      <ScrollToTop />
       <ErrorBoundary>
         <AccessibilityProvider>
           <NeonmapProvider>
