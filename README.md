@@ -10,7 +10,7 @@
 [![Privacy First](https://img.shields.io/badge/Privacy-LocalStorage%20First-4B8BBE.svg?style=flat-square)](https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-[![Eyeterra Walkthrough v1.0](https://img.youtube.com/vi/V5YWsfq7IH0/hqdefault.jpg)](https://www.youtube.com/embed/V5YWsfq7IH0)
+[![Eyeterra Walkthrough v1.0](https://img.youtube.com/vi/V5YWsfq7IH0/hqdefault.jpg)](https://www.youtube.com/watch?v=V5YWsfq7IH0)
 
 ## Vision & Mission
 
